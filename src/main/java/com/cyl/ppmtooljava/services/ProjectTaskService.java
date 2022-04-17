@@ -124,14 +124,14 @@ public class ProjectTaskService {
 
          //Backlog backlog = backlogRepository.findByProjectIdentifier(backlog_id);
         ProjectTask pt = findPTByProjectSequence(backlog_id, pt_id);
-//        Backlog backlog = pt.getBacklog();
-//        List<ProjectTask> projectTasks = backlog.getProjectTasks();
-//       // projectTasks.remove(projectTaskRepository.findByProjectSequence(pt_id));
+        Backlog backlog = pt.getBacklog();
+        List<ProjectTask> projectTasks = backlog.getProjectTasks();
+       // projectTasks.remove(projectTaskRepository.findByProjectSequence(pt_id));
 
-//        projectTasks.remove(pt);
-//        backlogRepository.save(backlog);
+        projectTasks.remove(pt);
+        backlogRepository.save(backlog);
 
-        projectTaskRepository.delete(pt);
+      //  projectTaskRepository.delete(pt);
 
     }
 }
