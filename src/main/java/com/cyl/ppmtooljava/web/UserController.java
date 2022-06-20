@@ -76,6 +76,7 @@ public class UserController {
         //validate password match
         userValidator.validate(user,result);
 
+
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap!=null){
             return errorMap;

@@ -32,7 +32,6 @@ public class User implements UserDetails {
     @NotBlank(message = "password is required")
     private String password;
     @Transient
-
     private String confirmPassword;
 
     private Date create_At;
