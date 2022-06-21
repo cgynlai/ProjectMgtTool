@@ -1,7 +1,7 @@
 package com.cyl.ppmtooljava.payload;
 
 /**
- * @Auther: cyl
+ * @Author: cyl
  * @Date: 24/5/2022 - 05 - 2022 - 11:19 AM
  * @Description: com.cyl.ppmtooljava.payload
  * @version: 1.0
