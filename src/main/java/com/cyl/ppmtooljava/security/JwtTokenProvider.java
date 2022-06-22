@@ -1,8 +1,7 @@
 package com.cyl.ppmtooljava.security;
 
 import com.cyl.ppmtooljava.domain.User;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -35,18 +34,43 @@ public String generateToken(Authentication authentication){
     claims.put("username", user.getUsername());
     claims.put("fullName", user.getFullName());
 
-    return Jwts.builder()
+    return Jwts.builder()             // compile time return type is JwtBuilder, runtime return new DefaultJwtBuilder()
             .setSubject(userId)
             .setClaims(claims)
             .setIssuedAt(now)
             .setExpiration(expiryDate)
             .signWith(SignatureAlgorithm.HS512, SECRET)
             .compact();
+    //JwtBuilder builder = Jwts.builder();
+
 }
     //Validate token
+    public boolean validateToken(String token){
+        try{
+           Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
+            return true;
+        }catch (SignatureException ex){
+            System.out.println("invalid JWT Signature");
+        }catch (MalformedJwtException ex){
+            System.out.println("invalid JWT token");
+        }catch (ExpiredJwtException ex){
+            System.out.println("expired JWT token");
+        }catch (UnsupportedJwtException ex){
+            System.out.println("unsupported JWT token");
+        }catch (IllegalArgumentException ex){
+            System.out.println("JWT claims string is empty");
+        }
+         return false;
+    }
 
     //Get user Id from token
+    public Long getUserIdFromJWT(String token){
+        Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+        String id = (String) claims.get("id");
 
+        return Long.parseLong(id);
+
+    }
 
 
 }
