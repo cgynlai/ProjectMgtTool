@@ -8,11 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
- * @Auther: cyl
+ * @Author: cyl
  * @Date: 5/5/2022 - 05 - 2022 - 4:04 PM
  * @Description: com.cyl.ppmtooljava.domain
  * @version: 1.0
@@ -38,6 +40,17 @@ public class User implements UserDetails {
 
     private Date create_At;
     private Date update_At;
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    private List<Project> projects = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
