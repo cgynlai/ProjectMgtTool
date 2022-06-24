@@ -23,21 +23,33 @@ public class ProjectService {
     @Autowired
     private BacklogRepository backlogRepository;
 
-    public Project saveOrUpdateProject(Project project, String name){
+    public Project saveOrUpdateProject(Project project, String username){
+
+        //check if project exists and belongs to user
+        if(project.getId() != null){
+            Project existingProject = projectRepository.findByProjectIdentifier(project.getProjectIdentifier());
+            if(existingProject !=null &&(!existingProject.getProjectLeader().equals(username))){
+                throw new ProjectNotFoundException("Project not found in your account");
+            }else if(existingProject == null){
+                throw new ProjectNotFoundException("Project with ID: '"+project.getProjectIdentifier()+"' cannot be updated because it doesn't exist");
+            }
+        }
 
         try{
-            User user = userRepository.findByUsername(name);
+            User user = userRepository.findByUsername(username);
             project.setUser(user);
             project.setProjectLeader(user.getUsername());
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
 
+            // if id is null, this is a new project to be created
             if(project.getId()==null){
                 Backlog backlog = new Backlog();
                 project.setBacklog(backlog);
                 backlog.setProject(project);
                 backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
             }
-
+            //if id is !null, this is existing project to be updated
+            //while updating project, to prevent Backlog becoming null, we need to set backlog again
             if(project.getId()!=null){
               project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
             }

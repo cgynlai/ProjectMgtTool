@@ -22,7 +22,7 @@ public class BacklogController {
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
-    @PostMapping("/{backlog_id}")
+    @PostMapping("/{backlog_id}")  //backlog_id is "projectIdentifier" from Project or Backlog
     public ResponseEntity<?> addPTtoBacklog(@Valid @RequestBody ProjectTask projectTask,
                                             BindingResult result, @PathVariable String backlog_id){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
